@@ -1,0 +1,21 @@
+version: 0.1
+environment_variables:
+  plaintext:
+    S3_BUCKET_NAME: "staging-all.educha.in"
+phases:
+  install:
+    commands:
+      - echo INSTALL DEPENDENCIES
+      - npm install
+  build:
+    commands:
+      - npm run build
+  post_build:
+    commands:
+      - echo BUILDING!
+      - aws s3 cp dist s3://${S3_BUCKET_NAME} --recursive
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'dist*'
+  discard-paths: yes
